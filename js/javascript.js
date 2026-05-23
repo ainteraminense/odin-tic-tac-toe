@@ -13,11 +13,29 @@ function GameBoard() {
     const getGameBoard = () => gameBoard;
 
     const markSpace = (row, column, player) => {
-        const availableCell = gameBoard[row][column]
-        .filter((cell) => cell === null);
+        const availableCell = gameBoard[row][column];
 
-        if (!availableCell) return;  
+        if (availableCell.getValue() === 0) return;  
         gameBoard[row][column].addMark(player);
     };
+
+    const printBoard = () => {
+        const gameBoardWithValues = gameBoard.map((row) => row.map((cell) => cell.getValue()));
+        console.log(gameBoardWithValues);
+    }
+
+    return { getGameBoard, markSpace, printBoard};
+}
+
+function Cell() {
+    let value = 0;
+
+    const addMark = (player) => {
+        value = player;
+    }
+
+    const getValue = () => value;
+
+    return {addMark, getValue};
 }
 
