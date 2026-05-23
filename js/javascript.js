@@ -15,14 +15,14 @@ function GameBoard() {
     const markSpace = (row, column, player) => {
         const availableCell = gameBoard[row][column];
 
-        if (availableCell.getValue() === 0) return;  
+        if (availableCell.getValue() !== 0) return;  
         gameBoard[row][column].addMark(player);
     };
 
     const printBoard = () => {
         const gameBoardWithValues = gameBoard.map((row) => row.map((cell) => cell.getValue()));
         console.log(gameBoardWithValues);
-    }
+    };
 
     return { getGameBoard, markSpace, printBoard};
 }
@@ -39,3 +39,50 @@ function Cell() {
     return {addMark, getValue};
 }
 
+function GameController(
+    playersOneName = "Player One",
+    playersTwoName = "Player Two"
+) {
+    const gameBoard = GameBoard();
+
+    const players = [
+        {
+            name: playersOneName,
+            mark: "X"
+        },
+        {
+            name: playersTwoName,
+            mark: "O"
+        },
+    ];
+
+    let activePlayer = players[0];
+
+    const switchPlayer = () => {
+        activePlayer = activePlayer === players[0] ? players[1] : players[0];
+    };
+
+    const getActivePlayer = () => activePlayer;
+
+    const printNewRound = () => {
+        gameBoard.printBoard();
+        console.log(`It's time for ${getActivePlayer().name} to make a move`);
+    };
+
+    const playRound = (row = 0, column = 0) => {
+        console.log(`Adding a ${getActivePlayer().mark} at position: row ${row} and column: ${column}`);
+        gameBoard.markSpace(row, column, getActivePlayer().mark);
+
+        // Implement check winner logic
+
+
+        switchPlayer();
+        printNewRound();
+    };
+
+    printNewRound();
+
+    return {getActivePlayer,  playRound};
+}
+
+const game = GameController();
