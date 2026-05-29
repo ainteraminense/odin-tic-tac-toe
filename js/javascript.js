@@ -58,6 +58,10 @@ function GameController(
 
     let activePlayer = players[0];
 
+    let winner = null;
+
+    const setWinner = () => getActivePlayer();  
+
     const switchPlayer = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
     };
@@ -69,15 +73,40 @@ function GameController(
         console.log(`It's time for ${getActivePlayer().name} to make a move`);
     };
 
-    const playRound = (row = 0, column = 0) => {
+    const playRound = (row, column) => {
         console.log(`Adding a ${getActivePlayer().mark} at position: row ${row} and column: ${column}`);
         gameBoard.markSpace(row, column, getActivePlayer().mark);
 
-        // Implement check winner logic
+        const checkWinner = (mark) => {
+            let columnCheck = false;
 
+            const checkColumn = () => {
+                gameBoard.getGameBoard().forEach((row) => {
+                    columnCheck = row[column].getValue() === mark ? true : false;
+                });
+            }
 
-        switchPlayer();
-        printNewRound();
+            checkColumn();
+            
+            if (
+                gameBoard.getGameBoard()[row].filter((cell) => cell.getValue() === mark).length === 3 ||
+                columnCheck ||
+                gameBoard.getGameBoard()[0][0].getValue() === mark && gameBoard.getGameBoard()[1][1].getValue() === mark && gameBoard.getGameBoard()[2][2].getValue() === mark||
+                gameBoard.getGameBoard()[2][0].getValue() === mark && gameBoard.getGameBoard()[1][1].getValue() === mark && gameBoard.getGameBoard()[0][2].getValue() === mark
+            ) {
+                winner = setWinner();
+            }
+        }
+
+        checkWinner(getActivePlayer().mark);
+
+        if (winner) {
+            gameBoard.printBoard();
+            console.log(`The winner is ${getActivePlayer().name}`);
+        } else {
+            switchPlayer();
+            printNewRound();
+        }
     };
 
     printNewRound();
