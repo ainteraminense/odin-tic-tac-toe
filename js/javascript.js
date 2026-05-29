@@ -2,6 +2,7 @@ function GameBoard() {
     const rows = 3;
     const columns = 3;
     const gameBoard = [];
+    const main = document.querySelector('.main');
 
     for (let i=0; i<rows; i++) {
         gameBoard[i] = [];
@@ -17,6 +18,10 @@ function GameBoard() {
 
         if (availableCell.getValue() !== 0) return;  
         gameBoard[row][column].addMark(player);
+        const playerSquare = document.createElement('div');
+        const playerSquareContent = document.createTextNode(player);
+        playerSquare.appendChild(playerSquareContent);
+        main.appendChild(playerSquare);
     };
 
     const printBoard = () => {
@@ -91,7 +96,7 @@ function GameController(
             if (
                 gameBoard.getGameBoard()[row].filter((cell) => cell.getValue() === mark).length === 3 ||
                 columnCheck ||
-                gameBoard.getGameBoard()[0][0].getValue() === mark && gameBoard.getGameBoard()[1][1].getValue() === mark && gameBoard.getGameBoard()[2][2].getValue() === mark||
+                gameBoard.getGameBoard()[0][0].getValue() === mark && gameBoard.getGameBoard()[1][1].getValue() === mark && gameBoard.getGameBoard()[2][2].getValue() === mark ||
                 gameBoard.getGameBoard()[2][0].getValue() === mark && gameBoard.getGameBoard()[1][1].getValue() === mark && gameBoard.getGameBoard()[0][2].getValue() === mark
             ) {
                 winner = setWinner();
